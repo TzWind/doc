@@ -16,6 +16,8 @@ for i in range(0,len(list)):
     			f.seek(0, 0)
     			f.write(addtxt+content)
 功能二合一
+（python2中文乱码问题open('index.html', 'r+', encoding='utf-8') 可解决
+或者直接用python3不用加encoding...）
 import os
 rootdir = '/root/web/_web'
 list = os.listdir(rootdir)
