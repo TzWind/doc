@@ -1,0 +1,28 @@
+替换文本
+sed -i 's/\.html/\.jsp/g' index3.html
+
+批量追加内容
+import os
+rootdir = '/root/web'
+list = os.listdir(rootdir)
+for i in range(0,len(list)):
+	path = os.path.join(rootdir,list[i])
+	if os.path.isfile(path):
+		f=open('a.txt','r')
+		addtxt=f.read()
+		f.close()
+		with open(path, 'r+') as f:
+    			content = f.read()        
+    			f.seek(0, 0)
+    			f.write(addtxt+content)
+
+批量修改文件名
+import os
+files = os.listdir("/root/web")
+
+for filename in files:
+    portion = os.path.splitext(filename)
+    print(portion)
+    if portion[1] == ".html":
+        newname = portion[0] + ".jsp"
+        os.rename(filename, newname)
