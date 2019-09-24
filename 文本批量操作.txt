@@ -15,8 +15,28 @@ for i in range(0,len(list)):
     			content = f.read()        
     			f.seek(0, 0)
     			f.write(addtxt+content)
+功能二合一
+import os
+rootdir = '/root/web/_web'
+list = os.listdir(rootdir)
+f=open('/root/web/_web/a.txt','r')
+addtxt=f.read()
+f.close()
+for i in range(0,len(list)):
+        path = os.path.join(rootdir,list[i])
+        if os.path.isfile(path):
+                with open(path, 'r+') as f:
+                        content = f.read()
+                        f.seek(0, 0)
+                        f.write(addtxt+content)
+                with open(path,'r+') as f:
+                        read_data=f.read()
+                        f.seek(0,0)
+                        f.write(read_data.replace('.html','.jsp'))
 
-批量修改文件名
+
+
+批量修改文件名(必须放到执行目录)
 import os
 files = os.listdir("/root/web")
 
