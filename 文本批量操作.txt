@@ -1,7 +1,7 @@
-Ìæ»»ÎÄ±¾
+æ›¿æ¢æ–‡æœ¬
 sed -i 's/\.html/\.jsp/g' index3.html
 
-ÅúÁ¿×·¼ÓÄÚÈİ
+æ‰¹é‡è¿½åŠ å†…å®¹
 import os
 rootdir = '/root/web'
 list = os.listdir(rootdir)
@@ -15,9 +15,9 @@ for i in range(0,len(list)):
     			content = f.read()        
     			f.seek(0, 0)
     			f.write(addtxt+content)
-¹¦ÄÜ¶şºÏÒ»
-£¨python2ÖĞÎÄÂÒÂëÎÊÌâopen('index.html', 'r+', encoding='utf-8') ¿É½â¾ö
-»òÕßÖ±½ÓÓÃpython3²»ÓÃ¼Óencoding...£©
+åŠŸèƒ½äºŒåˆä¸€
+ï¼ˆpython2ä¸­æ–‡ä¹±ç é—®é¢˜open('index.html', 'r+', encoding='utf-8') å¯è§£å†³
+æˆ–è€…ç›´æ¥ç”¨python3ä¸ç”¨åŠ encoding...ï¼‰
 import os
 rootdir = '/root/web/_web'
 list = os.listdir(rootdir)
@@ -31,6 +31,7 @@ for i in range(0,len(list)):
                         content = f.read()
                         f.seek(0, 0)
                         f.write(addtxt+content)
+#ä¹Ÿå¯ä»¥ç”¨os.system("sed -i 's/\.html/\.jsp/g' "+path)	
                 with open(path,'r+') as f:
                         read_data=f.read()
                         f.seek(0,0)
@@ -38,7 +39,7 @@ for i in range(0,len(list)):
 
 
 
-ÅúÁ¿ĞŞ¸ÄÎÄ¼şÃû(±ØĞë·Åµ½Ö´ĞĞÄ¿Â¼)
+æ‰¹é‡ä¿®æ”¹æ–‡ä»¶å(å¿…é¡»æ”¾åˆ°æ‰§è¡Œç›®å½•)
 import os
 files = os.listdir("/root/web")
 
