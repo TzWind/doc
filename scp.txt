@@ -1,0 +1,40 @@
+scp安装
+
+yum install -y openssh-clients
+
+Linux下scp的用法
+对拷文件夹 (包括文件夹本身)
+
+scp -r   /home/wwwroot/www/charts/util root@192.168.1.65:/home/wwwroot/limesurvey_back/scp
+
+对拷文件夹下所有文件 (不包括文件夹本身)
+
+scp   /home/wwwroot/www/charts/util/* root@192.168.1.65:/home/wwwroot/limesurvey_back/scp
+
+ 对拷文件并重命名
+
+scp   /home/wwwroot/www/charts/util/a.txt root@192.168.1.65:/home/wwwroot/limesurvey_back/scp/b.text
+
+/home/wwwroot/www/charts/util/           本地绝对路径
+
+a.txt                                                     要拷贝
+
+root                                                      通过root用户登录到远程服务器
+
+192.168.1.65                                       远程服务器的ip地址
+
+/home/wwwroot/limesurvey_back/scp  复制到远程服务器上的路径      （注意ip地址后有：）
+
+注:  通常还在后面输入  用户名和密码
+
+将远程服务器上的文件复制到本机
+
+#scp remote@www.abc.com:/usr/local/sin.sh /home/administrator
+
+remote                       通过remote用户登录到远程服务器（也可以使用其他拥有同等权限的用户）
+
+www.abc.com              远程服务器的域名（当然也可以使用该服务器ip地址）
+
+/usr/local/sin.sh           欲复制到本机的位于远程服务器上的文件
+
+/home/administrator  将远程文件复制到本地的绝对路径

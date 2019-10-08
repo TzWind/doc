@@ -1,0 +1,53 @@
+
+以下测试OK
+docker run -itd --privileged  --net=host  --name=centos_1 centos /usr/sbin/init
+docker exec -it centos_1 /bin/bash
+
+sudo docker ps -a
+
+接着执行导出：
+sudo docker export <CONTAINER ID> > /home/export.tar
+docker export 23012a456aa9 >/home/export.tar
+
+# 导入export.tar文件
+docker import export.tar centosnew          
+:latest  （:latest可以省略）
+
+docker run -itd --privileged  --net=host  --name=centos1 centosnew /bin/bash 
+
+（最好用/usr/sbin/init，但是容易内存溢出。好处是: systemctl enable ...等命令可以使用 ）
+docker run -itd --privileged  --net=host  --name=centos1 centosnew /usr/sbin/init
+
+进入容器内部(用/bin/bash或/bin/sh)：
+docker exec -it centos_1 /bin/bash
+
+
+ 
+
+    # 查看镜像
+    sudo docker images
+
+
+
+
+"how2j/tmall" 就是站长事先做好的一个镜像。 所谓的镜像，就是持久化后的，安装了各种工具，软件和服务的一个Linux 操作系统。 
+它是 站长事先就上传到 docker 的镜像仓库去的。 镜像仓库又在哪里呢？
+它就在这里啦：
+https://cloud.docker.com/u/how2j/repository/docker/how2j/tmall
+注：如何自己上传一个呢？ 这个在后面会讲解如何自己制作和上传。
+通过pull 命令, pull 就是拉取的意思，指的是把镜像从服务器上拉到 Docker 本地。 拉到本地之后，再把这个镜像激活，所谓的激活，就是把他 run 起来。 用的命令就是 运行镜像 中的 run 命令。
+ 
+docker run -dit --privileged -p21:21 -p80:80 -p8080:8080 -p30000-30010:30000-30010 --name how2jtmall how2j/tmall:latest /usr/sbin/init
+ 
+
+这个命令看着长，其实不难，我挨个挨个来给大家分解
+docker run 表示运行一个镜像
+-dit 是 -d -i -t 的缩写。 -d ，表示 detach，即在后台运行。 -i 表示提供交互接口，这样才可以通过 docker 和 跑起来的操作系统交互。 -t 表示提供一个 tty (伪终端)，与 -i 配合就可以通过 ssh 工具连接到 这个容器里面去了
+--privileged 启动容器的时候，把权限带进去。 这样才可以在容器里进行完整的操作
+-p21:21 第一个21，表示在CentOS 上开放21端口。 第二个21 表示在容器里开放21端口。 这样当访问CentOS 的21端口的时候，就会间接地访问到容器里了
+-p80:80 和 21一个道理
+-p8080:8080 和21 一个道理，在本例里，访问的地址是 http://192.168.84.128:8080/tmall/， 这个 192.168.84.128 是CentOS 的ip地址，8080是 CentOS 的端口，但是通过-p8080:8080 这么一映射，就访问到容器里的8080端口上的 tomcat了
+-p30000-30010 和21也是一个道理，这个是ftp用来传输数据的
+--name how2jtmall 给容器取了个名字，叫做 how2jtmall，方便后续管理
+how2j/tmall:latest how2j/tmall就是镜像的名称， latest是版本号，即最新版本
+/usr/sbin/init: 表示启动后运行的程序，即通过这个命令做初始化
