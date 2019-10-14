@@ -1,0 +1,61 @@
+"D:\tools\MYSQL\mysql-5.1.57-win32\bin\mysql.exe" -u root -padmin
+ 
+
+然后执行创建数据库的SQL语句
+ 
+CREATE DATABASE tmall_ssm DEFAULT CHARACTER SET utf8;
+ CREATE DATABASE how2java DEFAULT CHARACTER SET utf8;
+
+然后在当前 mysql 环境下输入 exit 退出 mysql 环境，才能进行下面的在cmd环境下的导入
+考虑到要导入的tmall_ssm.sql文件比较大，通过工具如mysql-front导入的时候，可能会出错导致失败，建议使用命令行导入：
+ 
+"D:\tools\MYSQL\mysql-5.1.57-win32\bin\mysql.exe" -u root -padmin --default-character-set=utf8 tmall_ssm < d:\tmall_ssm.sql
+
+-----------------------------------------------------
+
+在这里我们使用Tomcat容器来运行war包，不过作为一个网站一个程序，如果需要用到数据库的，那么Tomcat容器中如何连接Mysql呢？
+
+已经pull了tomcat和mysql镜像，可以使用docker的连接系统(–link)连接多个容器方式解决tomcat容器中使用mysql
+
+先启mysql！先启mysql！先启mysql！
+
+docker run --name mysql -p 3306:3306 -v /home/mysql/conf:/etc/mysql/conf.d -v /home/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=admin -d mysql:5.7.24
+
+我的：
+docker run --name mysql -p 3306:3306  -e MYSQL_ROOT_PASSWORD=admin -d mysql:5.7.24
+
+命令说明：
+
+?–name：自定义别名
+?-p 3306:3306：将容器的 3306 端口映射到主机的 3306 端口
+?-v /home/mysql/conf:/etc/mysql/conf.d：将主机 /home/mysql/conf/my.cnf 挂载到容器的 /etc/mysql/my.cnf
+?-v /home/mysql/data:/var/lib/mysql ：将主机 /home/mysql/data 目录挂载到容器的 /var/lib/mysql
+?-e MYSQL_ROOT_PASSWORD=123456：初始化 root 用户的密码
+?-d：以守护进程方式运行
+
+注：运行的mysql暴露端口（-p 3306:3306），如果在生产环境，为了安全也可以不向外暴露端口，之后在运行tomcat容器可以通过（--link）指定容器来使用mysql
+
+运行tomcat
+
+docker run --name tomcat -p 8080:8080 -v /etc/localtime:/etc/localtime:ro -v /home/tomcat/logs:/usr/local/tomcat/logs -d --link mysql:db tomcat1
+
+我的：
+docker run --name tomcatok -p 8080:8080  -d --link mysql:db tomcat
+
+命令说明：
+
+?–name：自定义别名
+?-p 8080:8080：将容器的 8080 端口映射到主机的 8080 端口
+?-v /etc/localtime:/etc/localtime:ro：挂载localtime文件到容器内，保证两者所采用的时区是一致的
+?-v /home/tomcat/logs:/usr/local/tomcat/logs：将主机 /home/tomcat/logs 目录挂载到容器的 /usr/local/tomcat/logs
+?-d：以守护进程方式运行
+?–link mysql:db：告诉当前容器需要使用mysql容器，并命名为db
+
+这样就可以在tomcat容器中通过db访问mysql了
+
+java代码连接属性不是localhost 要改成以下这种形式：
+jdbc_url=jdbc:mysql://db:3306/databasename?useUnicode=true&characterEncoding=utf8
+
+总结
+
+以上所述是小编给大家介绍的Docker中Tomcat容器使用Mysql容器的方法，希望对大家有所帮助，如果大家有任何疑问请给我留言，小编会及时回复大家的。在此也非常感谢大家对脚本之家网站的支持！
